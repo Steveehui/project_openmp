@@ -1,0 +1,10 @@
+^D:\DESKTOP\PROJECT_OPENMP\BUILD_VS\CMAKEFILES\EFC4247B2ACA2971FBF692DD1D5D7E00\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/Desktop/project_openmp -BD:/Desktop/project_openmp/build_vs --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/Desktop/project_openmp/build_vs/ImageConvolution.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

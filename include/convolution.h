@@ -78,6 +78,23 @@ namespace Convolution {
      * @brief CUDA 卷积(共享内存优化)
      */
     Image convolve_cuda_shared(const Image& input, const Kernel& kernel);
+
+    /**
+     * @brief CUDA 卷积(常量内存优化，小核)
+     */
+    Image convolve_cuda_const(const Image& input, const Kernel& kernel);
+
+    /**
+     * @brief 自适应策略卷积（占位含 Winograd/FFT/Sparse/Tensor-Core 调度）
+     */
+    enum class ConvPolicy {
+        Auto,
+        ConstSmall,
+        Shared,
+        FFTLike,
+        SparseBlock
+    };
+    Image convolve_cuda_policy(const Image& input, const Kernel& kernel, ConvPolicy policy = ConvPolicy::Auto);
     
     /**
      * @brief CUDA 批量卷积(朴素版本)

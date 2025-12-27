@@ -125,6 +125,54 @@ int main(int argc, char* argv[]) {
         std::cout << "    Time: " << std::fixed << std::setprecision(2) << avg_time << " sec, "
                   << "Speedup vs Shared: " << std::setprecision(2) << (ref_time / avg_time) << "x (baseline)\n";
     }
+
+    // 测试 CUDA_Const (小核常量内存优化)
+    {
+        std::cout << "  Testing CUDA_Const (small kernels)...\n";
+        double total_time = 0;
+        std::vector<Image> output;
+        for (int i = 0; i < iterations; ++i) {
+            timer.start();
+            output.clear();
+            output.reserve(total_tasks);
+            for (const auto& img : images) {
+                for (const auto& kernel : kernels) {
+                    output.push_back(Convolution::convolve_cuda_const(img, kernel));
+                }
+            }
+            timer.stop();
+            total_time += timer.elapsed();
+        }
+        double avg_time = total_time / iterations;
+        double mse = calculateMSE(reference, output);
+        results.push_back({"CUDA_Const", avg_time, ref_time / avg_time, mse < 1e-6, mse});
+        std::cout << "    Time: " << std::fixed << std::setprecision(2) << avg_time << " sec, "
+                  << "Speedup vs Shared: " << std::setprecision(2) << (ref_time / avg_time) << "x\n";
+    }
+
+    // 测试 CUDA_Policy (自适应调度占位：Winograd/FFT/Sparse/TensorCore)
+    {
+        std::cout << "  Testing CUDA_Policy (adaptive)...\n";
+        double total_time = 0;
+        std::vector<Image> output;
+        for (int i = 0; i < iterations; ++i) {
+            timer.start();
+            output.clear();
+            output.reserve(total_tasks);
+            for (const auto& img : images) {
+                for (const auto& kernel : kernels) {
+                    output.push_back(Convolution::convolve_cuda_policy(img, kernel, Convolution::ConvPolicy::Auto));
+                }
+            }
+            timer.stop();
+            total_time += timer.elapsed();
+        }
+        double avg_time = total_time / iterations;
+        double mse = calculateMSE(reference, output);
+        results.push_back({"CUDA_Policy", avg_time, ref_time / avg_time, mse < 1e-6, mse});
+        std::cout << "    Time: " << std::fixed << std::setprecision(2) << avg_time << " sec, "
+                  << "Speedup vs Shared: " << std::setprecision(2) << (ref_time / avg_time) << "x\n";
+    }
     
     // 测试 CUDA_Streams
     {
