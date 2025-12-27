@@ -1,0 +1,10 @@
+Method,Time_sec,Speedup,Type,Verified
+Serial,1.05342,1,CPU-Single,Yes
+OMP_Basic,0.16017,6.57689,CPU-Multi,Yes
+OMP_Blocked,0.148645,7.08682,CPU-Multi,Yes
+OMP_SIMD,0.167198,6.30043,CPU-Multi,Yes
+CUDA_Naive,0.321804,3.27348,GPU,Yes
+CUDA_Shared,0.147366,7.14832,GPU,Yes
+CUDA_Best,0.058457,18.0204,GPU,Yes
+CUDA_Streams,0.220749,4.77203,GPU,Yes
+Hybrid,0.17016,6.19076,CPU+GPU,Yes

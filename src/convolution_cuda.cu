@@ -289,15 +289,6 @@ static void launch_shared_kernel(
     }
 }
 
-// === 卷积策略枚举（未来可扩展为 RL/代价模型） ===
-enum class ConvPolicy {
-    Auto,
-    ConstSmall,   // 小核常量内存（Winograd/TF32 小核可扩展）
-    Shared,       // 共享内存 tiling
-    FFTLike,      // 占位：大核/大图 FFT 路径
-    SparseBlock   // 占位：块稀疏
-};
-
 /**
  * @brief CUDA 卷积 - 朴素实现
  */
